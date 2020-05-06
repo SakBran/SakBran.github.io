@@ -1,0 +1,531 @@
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["common"],{
+
+/***/ "./node_modules/@ionic/core/dist/esm/framework-delegate-d1eb6504.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/framework-delegate-d1eb6504.js ***!
+  \**************************************************************************/
+/*! exports provided: a, d */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return attachComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return detachComponent; });
+const attachComponent = async (delegate, container, component, cssClasses, componentProps) => {
+    if (delegate) {
+        return delegate.attachViewToDom(container, component, componentProps, cssClasses);
+    }
+    if (typeof component !== 'string' && !(component instanceof HTMLElement)) {
+        throw new Error('framework delegate is missing');
+    }
+    const el = (typeof component === 'string')
+        ? container.ownerDocument && container.ownerDocument.createElement(component)
+        : component;
+    if (cssClasses) {
+        cssClasses.forEach(c => el.classList.add(c));
+    }
+    if (componentProps) {
+        Object.assign(el, componentProps);
+    }
+    container.appendChild(el);
+    if (el.componentOnReady) {
+        await el.componentOnReady();
+    }
+    return el;
+};
+const detachComponent = (delegate, element) => {
+    if (element) {
+        if (delegate) {
+            const container = element.parentElement;
+            return delegate.removeViewFromDom(container, element);
+        }
+        element.remove();
+    }
+    return Promise.resolve();
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@ionic/core/dist/esm/haptic-ccbda579.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/haptic-ccbda579.js ***!
+  \**************************************************************/
+/*! exports provided: a, b, c, h */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return hapticSelectionStart; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return hapticSelectionChanged; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return hapticSelectionEnd; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return hapticSelection; });
+/**
+ * Check to see if the Haptic Plugin is available
+ * @return Returns `true` or false if the plugin is available
+ */
+/**
+ * Trigger a selection changed haptic event. Good for one-time events
+ * (not for gestures)
+ */
+const hapticSelection = () => {
+    const engine = window.TapticEngine;
+    if (engine) {
+        engine.selection();
+    }
+};
+/**
+ * Tell the haptic engine that a gesture for a selection change is starting.
+ */
+const hapticSelectionStart = () => {
+    const engine = window.TapticEngine;
+    if (engine) {
+        engine.gestureSelectionStart();
+    }
+};
+/**
+ * Tell the haptic engine that a selection changed during a gesture.
+ */
+const hapticSelectionChanged = () => {
+    const engine = window.TapticEngine;
+    if (engine) {
+        engine.gestureSelectionChanged();
+    }
+};
+/**
+ * Tell the haptic engine we are done with a gesture. This needs to be
+ * called lest resources are not properly recycled.
+ */
+const hapticSelectionEnd = () => {
+    const engine = window.TapticEngine;
+    if (engine) {
+        engine.gestureSelectionEnd();
+    }
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@ionic/core/dist/esm/spinner-configs-c78e170e.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/spinner-configs-c78e170e.js ***!
+  \***********************************************************************/
+/*! exports provided: S */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "S", function() { return SPINNERS; });
+const spinners = {
+    'bubbles': {
+        dur: 1000,
+        circles: 9,
+        fn: (dur, index, total) => {
+            const animationDelay = `${(dur * index / total) - dur}ms`;
+            const angle = 2 * Math.PI * index / total;
+            return {
+                r: 5,
+                style: {
+                    'top': `${9 * Math.sin(angle)}px`,
+                    'left': `${9 * Math.cos(angle)}px`,
+                    'animation-delay': animationDelay,
+                }
+            };
+        }
+    },
+    'circles': {
+        dur: 1000,
+        circles: 8,
+        fn: (dur, index, total) => {
+            const step = index / total;
+            const animationDelay = `${(dur * step) - dur}ms`;
+            const angle = 2 * Math.PI * step;
+            return {
+                r: 5,
+                style: {
+                    'top': `${9 * Math.sin(angle)}px`,
+                    'left': `${9 * Math.cos(angle)}px`,
+                    'animation-delay': animationDelay,
+                }
+            };
+        }
+    },
+    'circular': {
+        dur: 1400,
+        elmDuration: true,
+        circles: 1,
+        fn: () => {
+            return {
+                r: 20,
+                cx: 48,
+                cy: 48,
+                fill: 'none',
+                viewBox: '24 24 48 48',
+                transform: 'translate(0,0)',
+                style: {}
+            };
+        }
+    },
+    'crescent': {
+        dur: 750,
+        circles: 1,
+        fn: () => {
+            return {
+                r: 26,
+                style: {}
+            };
+        }
+    },
+    'dots': {
+        dur: 750,
+        circles: 3,
+        fn: (_, index) => {
+            const animationDelay = -(110 * index) + 'ms';
+            return {
+                r: 6,
+                style: {
+                    'left': `${9 - (9 * index)}px`,
+                    'animation-delay': animationDelay,
+                }
+            };
+        }
+    },
+    'lines': {
+        dur: 1000,
+        lines: 12,
+        fn: (dur, index, total) => {
+            const transform = `rotate(${30 * index + (index < 6 ? 180 : -180)}deg)`;
+            const animationDelay = `${(dur * index / total) - dur}ms`;
+            return {
+                y1: 17,
+                y2: 29,
+                style: {
+                    'transform': transform,
+                    'animation-delay': animationDelay,
+                }
+            };
+        }
+    },
+    'lines-small': {
+        dur: 1000,
+        lines: 12,
+        fn: (dur, index, total) => {
+            const transform = `rotate(${30 * index + (index < 6 ? 180 : -180)}deg)`;
+            const animationDelay = `${(dur * index / total) - dur}ms`;
+            return {
+                y1: 12,
+                y2: 20,
+                style: {
+                    'transform': transform,
+                    'animation-delay': animationDelay,
+                }
+            };
+        }
+    }
+};
+const SPINNERS = spinners;
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@ionic/core/dist/esm/theme-c2dc54d9.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/theme-c2dc54d9.js ***!
+  \*************************************************************/
+/*! exports provided: c, g, h, o */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return createColorClasses; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getClassMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return hostContext; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return openURL; });
+const hostContext = (selector, el) => {
+    return el.closest(selector) !== null;
+};
+/**
+ * Create the mode and color classes for the component based on the classes passed in
+ */
+const createColorClasses = (color) => {
+    return (typeof color === 'string' && color.length > 0) ? {
+        'ion-color': true,
+        [`ion-color-${color}`]: true
+    } : undefined;
+};
+const getClassList = (classes) => {
+    if (classes !== undefined) {
+        const array = Array.isArray(classes) ? classes : classes.split(' ');
+        return array
+            .filter(c => c != null)
+            .map(c => c.trim())
+            .filter(c => c !== '');
+    }
+    return [];
+};
+const getClassMap = (classes) => {
+    const map = {};
+    getClassList(classes).forEach(c => map[c] = true);
+    return map;
+};
+const SCHEME = /^[a-z][a-z0-9+\-.]*:/;
+const openURL = async (url, ev, direction) => {
+    if (url != null && url[0] !== '#' && !SCHEME.test(url)) {
+        const router = document.querySelector('ion-router');
+        if (router) {
+            if (ev != null) {
+                ev.preventDefault();
+            }
+            return router.push(url, direction);
+        }
+    }
+    return false;
+};
+
+
+
+
+/***/ }),
+
+/***/ "./src/app/Services/User/user.service.ts":
+/*!***********************************************!*\
+  !*** ./src/app/Services/User/user.service.ts ***!
+  \***********************************************/
+/*! exports provided: UserService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserService", function() { return UserService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var src_app_app_setting__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/app/app-setting */ "./src/app/app-setting.ts");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+
+let UserService = class UserService {
+    constructor(http, appSetting) {
+        this.http = http;
+        this.appSetting = appSetting;
+        this.url = `${this.appSetting.http}://${this.appSetting.apiPort}/api/userModels`;
+        this.httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpHeaders"]({
+                "Content-Type": "application/json"
+            })
+        };
+    }
+    get(id) {
+        const searchUrl = `${this.url}/${id}`;
+        return this.http.get(searchUrl);
+    }
+    getSingle(id) {
+        const searchUrl = `${this.url}/${id}`;
+        return this.http.get(searchUrl);
+    }
+    post(data) {
+        var obj;
+        sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
+            title: 'Please wait',
+            html: 'System is processing for your request',
+            onBeforeOpen: () => {
+                sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.showLoading();
+            }
+        });
+        this.http.post(this.url, data, this.httpOptions).subscribe(res => {
+            obj = res;
+        }, err => {
+            console.log(err);
+            let x = Object.assign(err);
+            sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.hideLoading();
+            sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire('Opps', x.error['Message'].toString(), 'error');
+        }, () => {
+            console.log(obj);
+            let x = Object.assign(obj);
+            this.appSetting.sessionUser = x;
+            sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.hideLoading();
+            this.appSetting.signUp = 0;
+            this.appSetting.otp = 1;
+            sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire('Success', 'Your account has been successfully created.', 'success');
+        });
+    }
+    put(data) {
+        const searchUrl = `${this.url}/${data.userID}`;
+        this.http.put(searchUrl, data, this.httpOptions).subscribe(res => {
+            console.log(res);
+        }, err => {
+            console.log(err);
+        });
+    }
+    delete(main) {
+        var data = null;
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = false;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === this.DONE) {
+                console.log(this.responseText);
+            }
+        });
+        xhr.open("DELETE", this.url + "/" + main);
+        xhr.send(data);
+        sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Success", "Your Process is successfully", "success");
+    }
+};
+UserService.ctorParameters = () => [
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"] },
+    { type: src_app_app_setting__WEBPACK_IMPORTED_MODULE_1__["appSetting"] }
+];
+UserService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"])({
+        providedIn: 'root'
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"], src_app_app_setting__WEBPACK_IMPORTED_MODULE_1__["appSetting"]])
+], UserService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/Services/unit/unit.service.ts":
+/*!***********************************************!*\
+  !*** ./src/app/Services/unit/unit.service.ts ***!
+  \***********************************************/
+/*! exports provided: UnitService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnitService", function() { return UnitService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var src_app_app_setting__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/app/app-setting */ "./src/app/app-setting.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+
+let UnitService = class UnitService {
+    constructor(http, appSetting) {
+        this.http = http;
+        this.appSetting = appSetting;
+        this.url = `${this.appSetting.http}://${this.appSetting.apiPort}/api/priceModels`;
+        this.httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                "Content-Type": "application/json"
+            })
+        };
+    }
+    get(id) {
+        const searchUrl = `${this.url}/${id}`;
+        return this.http.get(searchUrl);
+    }
+    post(data) {
+        var obj;
+        let x;
+        this.http.post(this.url, data, this.httpOptions).subscribe(res => {
+            obj = res;
+            console.log(res);
+        }, err => {
+            console.log(err);
+        }, () => {
+            x = Object.assign(obj);
+            sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Success", "Your Process is successfully", "success");
+        });
+    }
+    delete(id) {
+        var data = null;
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = false;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === this.DONE) {
+                console.log(this.responseText);
+            }
+        });
+        xhr.open("DELETE", this.url + "/" + id);
+        xhr.send(data);
+        sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Success", "Your Process is successfully", "success");
+    }
+};
+UnitService.ctorParameters = () => [
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+    { type: src_app_app_setting__WEBPACK_IMPORTED_MODULE_1__["appSetting"] }
+];
+UnitService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Injectable"])({
+        providedIn: 'root'
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"], src_app_app_setting__WEBPACK_IMPORTED_MODULE_1__["appSetting"]])
+], UnitService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/Services/userOrderTracking/user-order-tracking.service.ts":
+/*!***************************************************************************!*\
+  !*** ./src/app/Services/userOrderTracking/user-order-tracking.service.ts ***!
+  \***************************************************************************/
+/*! exports provided: UserOrderTrackingService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserOrderTrackingService", function() { return UserOrderTrackingService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var src_app_app_setting__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/app/app-setting */ "./src/app/app-setting.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+
+
+
+
+let UserOrderTrackingService = class UserOrderTrackingService {
+    constructor(http, appSetting) {
+        this.http = http;
+        this.appSetting = appSetting;
+        this.url = `${this.appSetting.http}://${this.appSetting.apiPort}/api/userOrderTracking`;
+        this.Delivery_url = `${this.appSetting.http}://${this.appSetting.apiPort}/api/userDeliveryTracking`;
+    }
+    getAll() {
+        return this.http.get(this.url);
+    }
+    getDelivery() {
+        return this.http.get(this.Delivery_url);
+    }
+    get(id) {
+        let url = this.url + `/${id}`;
+        return this.http.get(url);
+    }
+};
+UserOrderTrackingService.ctorParameters = () => [
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+    { type: src_app_app_setting__WEBPACK_IMPORTED_MODULE_1__["appSetting"] }
+];
+UserOrderTrackingService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Injectable"])({
+        providedIn: 'root'
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"], src_app_app_setting__WEBPACK_IMPORTED_MODULE_1__["appSetting"]])
+], UserOrderTrackingService);
+
+
+
+/***/ })
+
+}]);
+//# sourceMappingURL=common-es2015.js.map
